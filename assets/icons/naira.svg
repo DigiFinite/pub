@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="14"
+   height="14"
+   viewBox="0 0 14 14"
+   fill="none"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="naira.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     gridtolerance="10"
+     guidetolerance="10000"
+     inkscape:zoom="17.391304"
+     inkscape:cx="9.66"
+     inkscape:cy="10.32125"
+     inkscape:window-width="1366"
+     inkscape:window-height="717"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     id="path6191"
+     style="fill:#000000;stroke-width:1.11743"
+     d="M 1.3926471,0.15046187 V 4.940956 H 0.0140838 V 6.2312258 H 1.3926471 V 7.8762633 H 0.0140838 V 9.1687931 H 1.3926471 V 14.040635 H 3.6649577 V 9.1687931 h 3.4379761 l 3.3220412,4.8718419 h 2.196426 V 9.1687931 h 1.378564 V 7.8762633 H 12.621401 V 6.2312258 h 1.378564 V 4.940956 H 12.621401 V 0.15046187 h -2.27231 V 4.940956 H 7.0059703 L 3.7239781,0.15046187 Z M 3.5827497,2.816869 4.8032202,4.6946522 3.5932895,4.7127292 Z m 3.6635204,3.1477161 3.0311519,0.040673 V 7.6502964 L 8.3065412,7.6231799 Z M 3.5932895,6.0052589 5.56417,6.0323743 6.624441,7.69097 3.5932895,7.6502962 Z m 6.6841325,2.9353074 0.01053,1.8981197 -1.2204704,-1.8800424 z" />
+</svg>
