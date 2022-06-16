@@ -45,13 +45,16 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text(
-                        "VIEW ALL",
-                        style: TextStyle(
-                          color: DroColors.purple,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                      InkWell(
+                        child: Text(
+                          "VIEW ALL",
+                          style: TextStyle(
+                            color: DroColors.purple,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
+                        onTap: () => Navigator.of(context).pushNamed('/all_categories')
                       ),
                     ],
                   ),

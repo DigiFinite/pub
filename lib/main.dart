@@ -1,3 +1,4 @@
+import 'package:dro_health_home_task/pages/categories_page.dart';
 import 'package:dro_health_home_task/pages/home_page.dart';
 import 'package:dro_health_home_task/pages/search_page.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +28,13 @@ class MyApp extends StatelessWidget {
           case "/search_page":
             return MaterialPageRoute(builder: (context) {
               final searchTerm = settings.arguments.toString();
-              return  SearchPage(
+              return SearchPage(
                 searchTerm: searchTerm,
               );
+            });
+          case "/all_categories":
+            return MaterialPageRoute(builder: (context) {
+              return const CategoriesPage();
             });
         }
       },
