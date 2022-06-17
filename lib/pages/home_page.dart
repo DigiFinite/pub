@@ -1,3 +1,5 @@
+import 'package:dro_health_home_task/bloc/categories_bloc/bloc/categories_bloc.dart';
+import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:dro_health_home_task/widgets/delivery_location.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,9 @@ import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
 import 'package:dro_health_home_task/widgets/product_card.dart';
 import 'package:dro_health_home_task/widgets/search_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,6 +24,13 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Load all categories
+    BlocProvider.of<CategoriesBloc>(context).add(FetchAllCategoriesEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
@@ -27,7 +38,14 @@ class _HomePageState extends State<HomePage> {
         appBar: _buildAppBar(),
         body: Column(
           children: [
-            const DeliveryLocationWidget(),
+            InkWell(
+              child: const DeliveryLocationWidget(),
+              onTap: () {
+                BlocProvider.of<CategoriesBloc>(context).add(
+                  FetchAllCategoriesEvent(),
+                );
+              },
+            ),
             Expanded(
               child: Container(
                 color: Colors.white,
@@ -48,16 +66,17 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         InkWell(
-                            child: Text(
-                              "VIEW ALL",
-                              style: TextStyle(
-                                color: DroColors.purple,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          child: Text(
+                            "VIEW ALL",
+                            style: TextStyle(
+                              color: DroColors.purple,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/all_categories')),
+                          ),
+                          onTap: () => Navigator.of(context)
+                              .pushNamed('/all_categories'),
+                        ),
                       ],
                     ),
                     Container(
@@ -154,21 +173,49 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ListView _buildCategoryList() {
-    return ListView.separated(
-      shrinkWrap: true,
-      clipBehavior: Clip.none,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        final Category category = categories[index];
-        return CategoryContainer(category: category);
+  Widget _buildCategoryList() {
+    return BlocBuilder<CategoriesBloc, CategoriesState>(
+      builder: (context, state) {
+        if (state is CategoriesSuccessfulState) {
+          final categories = state.categories;
+          return ListView.separated(
+            shrinkWrap: true,
+            clipBehavior: Clip.none,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final Category category = categories[index];
+              return CategoryContainer(category: category);
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+              width: 16,
+            ),
+            itemCount: categories.length,
+          );
+        } else if (state is CategoriesLoadingState) {
+          return ListView.separated(
+            shrinkWrap: true,
+            clipBehavior: Clip.none,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return DroUtils.buildShimmer(
+                width: 120,
+                height: 100,
+                borderRadius: BorderRadius.circular(10),
+                shape: BoxShape.rectangle,
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+              width: 16,
+            ),
+            itemCount: 4,
+          );
+        }
+        return const SizedBox.shrink();
       },
-      separatorBuilder: (context, index) => const SizedBox(
-        width: 16,
-      ),
-      itemCount: categories.length,
     );
   }
+
+  
 
   PreferredSize _buildAppBar() {
     return PreferredSize(

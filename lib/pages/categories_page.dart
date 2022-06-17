@@ -1,7 +1,10 @@
+import 'package:dro_health_home_task/bloc/categories_bloc/bloc/categories_bloc.dart';
 import 'package:dro_health_home_task/models/category.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
+import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoriesPage extends StatelessWidget {
   const CategoriesPage({Key? key}) : super(key: key);
@@ -14,22 +17,50 @@ class CategoriesPage extends StatelessWidget {
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         children: [
-          GridView.count(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 20,
-            childAspectRatio: 1.6,
-            children: List.generate(
-              categories.length,
-              (index) {
-                final Category category = categories[index];
-                return CategoryContainer(category: category, height: 50,);
-              },
-            ),
-          )
+          BlocBuilder<CategoriesBloc, CategoriesState>(
+              builder: (context, state) {
+            if (state is CategoriesSuccessfulState) {
+              final categories = state.categories;
+              return GridView.count(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 20,
+                childAspectRatio: 1.6,
+                children: List.generate(
+                  categories.length,
+                  (index) {
+                    final Category category = categories[index];
+                    return CategoryContainer(
+                      category: category,
+                      height: 50,
+                    );
+                  },
+                ),
+              );
+            } else if (state is CategoriesLoadingState) {
+              return GridView.count(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 20,
+                childAspectRatio: 1.6,
+                children: List.generate(4, (index) {
+                  return DroUtils.buildShimmer(
+                    width: 120,
+                    height: 100,
+                    borderRadius: BorderRadius.circular(10),
+                    shape: BoxShape.rectangle,
+                  );
+                }),
+              );
+            }
+             return const SizedBox.shrink();
+          })
         ],
       ),
     );
@@ -61,7 +92,7 @@ class CategoriesPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                   InkWell(
+                  InkWell(
                     child: const Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,
