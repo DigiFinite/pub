@@ -1,7 +1,6 @@
 import 'package:dro_health_home_task/models/category.dart';
-import 'package:dro_health_home_task/models/drug.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
-import 'package:dro_health_home_task/widgets/category_card.dart';
+import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesPage extends StatelessWidget {
@@ -10,81 +9,7 @@ class CategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-            image: DecorationImage(
-              image: AssetImage(
-                "assets/images/app_bar.png",
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 58.0,
-              left: 24,
-              right: 24,
-              bottom: 20,
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                     InkWell(
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                      ),
-                      onTap: () => Navigator.of(context).pop(),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Pharmarcy",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Stack(
-                            children: [
-                              const Icon(
-                                Icons.shopping_cart_outlined,
-                                color: Colors.white,
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 2,
-                                child: Container(
-                                  height: 7,
-                                  width: 7,
-                                  decoration: BoxDecoration(
-                                    color: DroColors.yellow,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        preferredSize: const Size.fromHeight(100),
-      ),
+      appBar: _buildAppBar(context),
       body: ListView(
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
@@ -107,6 +32,84 @@ class CategoriesPage extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  PreferredSize _buildAppBar(BuildContext context) {
+    return PreferredSize(
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/images/app_bar.png",
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 58.0,
+            left: 24,
+            right: 24,
+            bottom: 20,
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                   InkWell(
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onTap: () => Navigator.of(context).pop(),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Categories",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Stack(
+                          children: [
+                            const Icon(
+                              Icons.shopping_cart_outlined,
+                              color: Colors.white,
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 2,
+                              child: Container(
+                                height: 7,
+                                width: 7,
+                                decoration: BoxDecoration(
+                                  color: DroColors.yellow,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      preferredSize: const Size.fromHeight(100),
     );
   }
 }

@@ -1,11 +1,11 @@
-import 'package:dro_health_home_task/widgets/category_card.dart';
+import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:dro_health_home_task/widgets/delivery_location.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dro_health_home_task/models/category.dart';
-import 'package:dro_health_home_task/models/drug.dart';
+import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
-import 'package:dro_health_home_task/widgets/drug_card.dart';
+import 'package:dro_health_home_task/widgets/product_card.dart';
 import 'package:dro_health_home_task/widgets/search_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +80,10 @@ class _HomePageState extends State<HomePage> {
                     crossAxisSpacing: 20,
                     childAspectRatio: .67,
                     children: List.generate(
-                      drugs.length,
+                      products.length,
                       (index) {
-                        final drug = drugs[index];
-                        return DrugCard(drug: drug);
+                        final drug = products[index];
+                        return ProductCard(product: drug);
                       },
                     ),
                   )

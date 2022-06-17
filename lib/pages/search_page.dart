@@ -1,8 +1,9 @@
+import 'package:dro_health_home_task/widgets/dro_favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-import 'package:dro_health_home_task/models/drug.dart';
+import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
 import 'package:dro_health_home_task/widgets/delivery_location.dart';
 import 'package:dro_health_home_task/widgets/search_field.dart';
@@ -53,8 +54,8 @@ class _SearchPageState extends State<SearchPage> {
                     children: List.generate(
                       3,
                       (index) {
-                        final drug = drugs[index];
-                        return _buildAddToCardContainer(drug);
+                        final product = products[index];
+                        return _buildAddToCardContainer(product);
                       },
                     ),
                   )
@@ -115,7 +116,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Container _buildAddToCardContainer(Drug drug) {
+  Container _buildAddToCardContainer(Product product) {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -133,7 +134,7 @@ class _SearchPageState extends State<SearchPage> {
       child: Column(
         children: [
           Image.asset(
-            drug.imageSource.toString(),
+            product.imageSource.toString(),
             height: 125,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -150,7 +151,7 @@ class _SearchPageState extends State<SearchPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      drug.name.toString(),
+                      product.name.toString(),
                       maxLines: 2,
                       softWrap: true,
                       style: const TextStyle(
@@ -162,7 +163,7 @@ class _SearchPageState extends State<SearchPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          drug.type.toString(),
+                          product.type.toString(),
                           style: const TextStyle(
                             color: Colors.grey,
                           ),
@@ -179,7 +180,7 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                         Text(
-                          "${drug.mass.toString()} mg",
+                          "${product.mass.toString()} mg",
                           style: const TextStyle(
                             color: Colors.grey,
                           ),
@@ -199,7 +200,7 @@ class _SearchPageState extends State<SearchPage> {
                               NumberFormat.simpleCurrency(
                                 decimalDigits: 2,
                                 name: "",
-                              ).format(drug.price),
+                              ).format(product.price),
                               style: const TextStyle(
                                 color: Color(0xFF363636),
                                 fontSize: 18,
@@ -208,18 +209,7 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ],
                         ),
-                        Container(
-                          height: 32,
-                          width: 32,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: const Color.fromRGBO(159, 93, 226, 0.1),
-                          ),
-                          child: Icon(
-                            Icons.favorite_outline,
-                            color: DroColors.purple,
-                          ),
-                        ),
+                        const DroFavoriteButton(),
                       ],
                     ),
                     _buildAddToCardButton()
@@ -335,3 +325,5 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
+
+

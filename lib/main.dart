@@ -1,3 +1,5 @@
+import 'package:dro_health_home_task/models/product.dart';
+import 'package:dro_health_home_task/pages/product_detail_page.dart';
 import 'package:dro_health_home_task/pages/categories_page.dart';
 import 'package:dro_health_home_task/pages/home_page.dart';
 import 'package:dro_health_home_task/pages/search_page.dart';
@@ -35,6 +37,12 @@ class MyApp extends StatelessWidget {
           case "/all_categories":
             return MaterialPageRoute(builder: (context) {
               return const CategoriesPage();
+            });
+
+          case "/product_detail":
+            return MaterialPageRoute(builder: (context) {
+              final Product product = settings.arguments as Product;
+              return ProductDetail(product: product,);
             });
         }
       },

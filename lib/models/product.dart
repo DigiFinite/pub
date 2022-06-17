@@ -1,5 +1,5 @@
-class Drug {
-  Drug({
+class Product {
+  Product({
     this.id,
     this.name,
     this.type,
@@ -16,8 +16,8 @@ class Drug {
   final String? imageSource;
 }
 
-final List<Drug> drugs = [
-  Drug(
+final List<Product> products = [
+  Product(
     id: 1,
     name: "Paracetamol",
     type: "Tablet",
@@ -25,7 +25,7 @@ final List<Drug> drugs = [
     price: 350,
     imageSource: "assets/images/emzor_paracetamol.jpeg"
   ),
-  Drug(
+  Product(
     id: 2,
     name: "Doliprane",
     type: "Capsule",
@@ -33,7 +33,7 @@ final List<Drug> drugs = [
     price: 350,
     imageSource: "assets/images/doliprane_paracetamol.jpeg"
   ),
-  Drug(
+  Product(
     id: 3,
     name: "Paracetamol",
     type: "Tablet",
@@ -41,7 +41,7 @@ final List<Drug> drugs = [
     price: 500,
     imageSource: "assets/images/ratiopharm_paracetamol.jpg"
   ),
-  Drug(
+  Product(
     id: 4,
     name: "Ibuprofen",
     type: "Tablet",
@@ -49,7 +49,7 @@ final List<Drug> drugs = [
     price: 700,
     imageSource: "assets/images/ibuprofen.jpg"
   ),
-  Drug(
+  Product(
     id: 5,
     name: "Panadol",
     type: "Tablet",
@@ -57,7 +57,7 @@ final List<Drug> drugs = [
     price: 350,
     imageSource: "assets/images/panadol_extra.jpeg"
   ),
-  Drug(
+  Product(
     id: 6,
     name: "Ibuprofen",
     type: "Tablet",
@@ -65,7 +65,7 @@ final List<Drug> drugs = [
     price: 500,
     imageSource: "assets/images/ibuprofen-2.jpeg"
   ),
-  Drug(
+  Product(
     id: 6,
     name: "Emzor Paracetamol",
     type: "Syrup",
