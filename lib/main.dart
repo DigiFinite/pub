@@ -1,6 +1,7 @@
 import 'package:dro_health_home_task/bloc/cart/cart_bloc.dart';
 import 'package:dro_health_home_task/bloc/categories_bloc/bloc/categories_bloc.dart';
 import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
+import 'package:dro_health_home_task/bloc/search/search_bloc.dart';
 import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/pages/cart_page.dart';
 import 'package:dro_health_home_task/pages/product_detail_page.dart';
@@ -30,6 +31,9 @@ class DroApp extends StatelessWidget {
         ),
         BlocProvider<CartBloc>(
           create: (context) => CartBloc(),
+        ),
+        BlocProvider<SearchBloc>(
+          create: (context) => SearchBloc(),
         ),
       ],
       child: MaterialApp(
@@ -68,6 +72,9 @@ class DroApp extends StatelessWidget {
               return MaterialPageRoute(builder: (context) {
                 return const CartPage();
               });
+
+            default:
+              return null;
           }
         },
         theme: ThemeData(primarySwatch: Colors.purple, fontFamily: "Proxima"),

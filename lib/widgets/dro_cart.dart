@@ -10,44 +10,48 @@ class DroCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartBloc, CartState>(
-      builder: (context, state) {
-        if (state is CartSuccessfulState) {
-          final cartItems = state.cartItems;
-          if (cartItems.isEmpty) {
-            return const Icon(
-              Icons.shopping_cart_outlined,
-              color: Colors.white,
-            );
-          } else {
-            return Stack(
-              clipBehavior: Clip.none,
-              children: [
-                const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: Colors.white,
-                ),
-                Positioned(
-                  top: -5,
-                  right: 2,
-                  child: Container(
-                    height: 7,
-                    width: 7,
-                    decoration: BoxDecoration(
-                      color: DroColors.yellow,
-                      shape: BoxShape.circle,
-                    ),
+    return InkWell(
+      child: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          if (state is CartSuccessfulState) {
+            final cartItems = state.cartItems;
+            if (cartItems.isEmpty) {
+              return const Icon(
+                Icons.shopping_cart_outlined,
+                color: Colors.white,
+              );
+            } else {
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  const Icon(
+                    Icons.shopping_cart_outlined,
+                    color: Colors.white,
                   ),
-                )
-              ],
-            );
+                  Positioned(
+                    top: -5,
+                    right: 2,
+                    child: Container(
+                      height: 7,
+                      width: 7,
+                      decoration: BoxDecoration(
+                        color: DroColors.yellow,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  )
+                ],
+              );
+            }
           }
-        }
-        return const Icon(
-          Icons.shopping_cart_outlined,
-          color: Colors.white,
-        );
-      },
+          return const Icon(
+            Icons.shopping_cart_outlined,
+            color: Colors.white,
+          );
+        },
+      ),
+      onTap: ()  => Navigator.of(context).pushNamed('/cart_page'),
     );
+ 
   }
 }

@@ -115,12 +115,14 @@ class _HomePageState extends State<HomePage> {
                               crossAxisCount: 2,
                               mainAxisSpacing: 10,
                               crossAxisSpacing: 20,
-                              childAspectRatio: .67,
+                             
+                              childAspectRatio: MediaQuery.of(context).orientation == Orientation.portrait ? 0.67 : 1.2,
+
                               children: List.generate(
                                 products.length,
                                 (index) {
-                                  final product = products[index];
-                                  return ProductCard(product: product);
+                                  final productItem = products[index];
+                                  return ProductCard(product: productItem);
                                 },
                               ),
                             );

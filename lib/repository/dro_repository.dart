@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dro_health_home_task/models/cart_item.dart';
 import 'package:dro_health_home_task/models/cart_item_response.dart';
 import 'package:dro_health_home_task/models/category.dart';
@@ -156,8 +154,25 @@ class DroRepository {
       const Duration(seconds: 0),
       () {
         cartItems.remove(cartItem);
-   
+
         return cartItems;
+      },
+    );
+  }
+
+  static searchForProduct({required String searchTerm}) {
+    return Future.delayed(
+      const Duration(seconds: 0),
+      () {
+        final searchResult = products.where(
+          (product) {
+            return product.name!
+                .toLowerCase()
+                .contains(searchTerm.toLowerCase());
+          },
+        ).toList();
+
+        return searchResult;
       },
     );
   }

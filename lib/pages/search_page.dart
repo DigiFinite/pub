@@ -1,4 +1,7 @@
+import 'package:dro_health_home_task/bloc/cart/cart_bloc.dart';
 import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
+import 'package:dro_health_home_task/bloc/search/search_bloc.dart';
+import 'package:dro_health_home_task/models/cart_item.dart';
 import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/dro_favorite_button.dart';
 import 'package:flutter/material.dart';
@@ -33,114 +36,196 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          const DeliveryLocationWidget(),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              child: ListView(
-                shrinkWrap: true,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                children: [
-                  BlocBuilder<ProductsBloc, ProductsState>(
-                    builder: (context, state) {
-                      if (state is ProductsSuccessfulState) {
-                        final products = state.products;
-                        return GridView.count(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 20,
-                          childAspectRatio: .62,
-                          children: List.generate(
-                            3,
-                            (index) {
-                              final product = products[index];
-                              return _buildAddToCardContainer(product);
-                            },
-                          ),
-                        );
-                      } else if (state is ProductsLoadingState) {
-                        return GridView.count(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 20,
-                          childAspectRatio: .62,
-                          children: List.generate(3, (index) {
-                            return DroUtils.buildShimmer(
-                              width: 170,
-                              height: 200,
-                              borderRadius: BorderRadius.circular(10),
-                            );
-                          }),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  )
-                ],
+    return BlocListener<CartBloc, CartState>(
+      listener: (context, state) {
+        if (state is CartItemAddedFailedState) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: DroColors.purple,
+              content: const Text(
+                "Item already exist in your cart",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          )
-        ],
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: Column(
+          children: [
+            const DeliveryLocationWidget(),
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                child: ListView(
+                  shrinkWrap: true,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  children: [
+                    BlocBuilder<SearchBloc, SearchState>(
+                      builder: (context, state) {
+                        if (state is SearchSuccessfulState) {
+                          final products = state.searchResult;
+
+                          if (products.isEmpty) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset("assets/images/error404.png"),
+                                Text(
+                                  "No result found for \"${_controller.text}\"",
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+
+                          return GridView.count(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 20,
+                            childAspectRatio:
+                                MediaQuery.of(context).orientation ==
+                                        Orientation.portrait
+                                    ? 0.62
+                                    : 1.1,
+                            children: List.generate(
+                              products.length,
+                              (index) {
+                                final product = products[index];
+                                return _buildAddToCardContainer(product);
+                              },
+                            ),
+                          );
+                        } else if (state is SearchLoadingState) {
+                          return GridView.count(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 20,
+                            childAspectRatio: .62,
+                            children: List.generate(3, (index) {
+                              return DroUtils.buildShimmer(
+                                width: 170,
+                                height: 200,
+                                borderRadius: BorderRadius.circular(10),
+                              );
+                            }),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+        floatingActionButton: _buildFAB(),
       ),
-      floatingActionButton: _buildFAB(),
     );
   }
 
-  Stack _buildFAB() {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: Colors.white, width: 3),
-            gradient: const LinearGradient(
-              tileMode: TileMode.mirror,
-              stops: [0.1, 0.7],
-              colors: [
-                Color(0xFFFE806F),
-                Color(0xFFE5366A),
-              ],
-            ),
-          ),
-          child: const Icon(
-            Icons.shopping_cart_outlined,
-            color: Colors.white,
-          ),
-        ),
-        Positioned(
-            top: -6,
-            right: 8,
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: DroColors.yellow,
-              ),
-              child: const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    "3",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+  Widget _buildFAB() {
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        if (state is CartSuccessfulState) {
+          final cartItems = state.cartItems;
+
+          if (cartItems.isEmpty) {
+            return _buildEmptyCartWidget();
+          } else {
+            return InkWell(
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(color: Colors.white, width: 3),
+                      gradient: const LinearGradient(
+                        tileMode: TileMode.mirror,
+                        stops: [0.1, 0.7],
+                        colors: [
+                          Color(0xFFFE806F),
+                          Color(0xFFE5366A),
+                        ],
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.shopping_cart_outlined,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: -6,
+                    right: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: DroColors.yellow,
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            cartItems.length.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ))
-      ],
+              onTap: () =>
+                  Navigator.of(context).pushReplacementNamed('/cart_page'),
+            );
+          }
+        }
+        return _buildEmptyCartWidget();
+      },
+    );
+  }
+
+  Container _buildEmptyCartWidget() {
+    return Container(
+      width: 50,
+      height: 50,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(color: Colors.white, width: 3),
+        gradient: const LinearGradient(
+          tileMode: TileMode.mirror,
+          stops: [0.1, 0.7],
+          colors: [
+            Color(0xFFFE806F),
+            Color(0xFFE5366A),
+          ],
+        ),
+      ),
+      child: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
     );
   }
 
@@ -240,7 +325,7 @@ class _SearchPageState extends State<SearchPage> {
                         const DroFavoriteButton(),
                       ],
                     ),
-                    _buildAddToCardButton()
+                    _buildAddToCardButton(product)
                   ],
                 ),
               ),
@@ -251,7 +336,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Center _buildAddToCardButton() {
+  Center _buildAddToCardButton(Product product) {
     return Center(
       child: TextButton(
         child: const Text(
@@ -272,7 +357,15 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          final item = CartItem(
+            product: product,
+            quantity: 1,
+          );
+          BlocProvider.of<CartBloc>(context).add(
+            AddItemToCartEvent(cartItem: item),
+          );
+        },
       ),
     );
   }
@@ -303,11 +396,12 @@ class _SearchPageState extends State<SearchPage> {
             children: [
               Row(
                 children: [
-                  const InkWell(
-                    child: Icon(
+                  InkWell(
+                    child: const Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,
                     ),
+                    onTap: () => Navigator.of(context).pop(),
                   ),
                   Expanded(
                     child: Row(
@@ -344,7 +438,33 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
               const SizedBox(height: 24),
-              SearchField(controller: _controller),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: SearchField(controller: _controller)),
+                  const SizedBox(width: 20),
+                  BlocBuilder<SearchBloc, SearchState>(
+                    builder: (context, state) {
+                      if (state is SearchSuccessfulState) {
+                        final result = state.searchResult;
+                        if (result.isEmpty) {
+                          return const Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          );
+                        } else {
+                          return const SizedBox(width: 50);
+                        }
+                      }
+                        return const SizedBox(width: 50);
+                    },
+                  )
+                ],
+              ),
             ],
           ),
         ),

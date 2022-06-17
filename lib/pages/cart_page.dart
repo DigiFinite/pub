@@ -1,6 +1,5 @@
 import 'package:dro_health_home_task/bloc/cart/cart_bloc.dart';
 import 'package:dro_health_home_task/models/cart_item.dart';
-import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,124 +17,112 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
-    double totalAmount = 0;
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildAppBar(context),
+      body: Column(
+        children: [
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartSuccessfulState) {
+                final cartItems = state.cartItems.reversed.toList();
 
-    return BlocListener<CartBloc, CartState>(
-      listener: (context, state) {
-        if (state is CartSuccessfulState) {
-          final cartItems = state.cartItems;
-          for (CartItem item in cartItems) {
-            totalAmount += item.totalPrice.toDouble();
-          }
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildAppBar(context),
-        body: Column(
-          children: [
-            BlocBuilder<CartBloc, CartState>(
-              builder: (context, state) {
-                if (state is CartSuccessfulState) {
-                  final cartItems = state.cartItems;
-
-                  if (cartItems.isEmpty) {
-                    return const Expanded(
-                      child: Center(
-                        child: Text(
-                          "Cart is currently empty",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Expanded(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24.0,
-                          vertical: 16.0,
-                        ),
-                        itemCount: cartItems.length,
-                        itemBuilder: (context, index) {
-                          final CartItem cartItem = cartItems[index];
-                          return _buildCartItemWidget(cartItem, index);
-                        },
-                        separatorBuilder: (context, index) => const Divider(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    );
-                  }
-                } else if (state is CartLoadingState) {
-                  return Expanded(
+                if (cartItems.isEmpty) {
+                  return const Expanded(
                     child: Center(
-                      child: SpinKitCircle(color: DroColors.purple),
+                      child: Text(
+                        "Cart is currently empty",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return Expanded(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                        vertical: 16.0,
+                      ),
+                      itemCount: cartItems.length,
+                      itemBuilder: (context, index) {
+                        final CartItem cartItem = cartItems[index];
+                        return _buildCartItemWidget(cartItem, index);
+                      },
+                      separatorBuilder: (context, index) => const Divider(
+                        color: Colors.grey,
+                      ),
                     ),
                   );
                 }
-                return Expanded(child: Container());
-              },
-            ),
-            Container(
-              height: 95,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Text(
-                        "Total: ",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                      SvgPicture.asset("assets/icons/naira.svg"),
-                      BlocBuilder<CartBloc, CartState>(
-                        builder: (context, state) {
-                          if (state is CartSuccessfulState) {
-                            double totalAmount = 0;
-                            final cartItems = state.cartItems;
-
-                            for (CartItem item in cartItems) {
-                              totalAmount += item.totalPrice.toDouble();
-                            }
-                            return Text(
-                              "$totalAmount",
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            );
-                          } else if (state is CartLoadingState) {
-                            return const Text(
-                              "...",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
-                      ),
-                    ],
+              } else if (state is CartLoadingState) {
+                return Expanded(
+                  child: Center(
+                    child: SpinKitCircle(color: DroColors.purple),
                   ),
-                  _buildCheckoutButton(),
-                ],
-              ),
+                );
+              }
+              return Expanded(child: Container());
+            },
+          ),
+          Container(
+            height: 95,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      "Total: ",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    SvgPicture.asset("assets/icons/naira.svg"),
+                    BlocBuilder<CartBloc, CartState>(
+                      builder: (context, state) {
+                        if (state is CartSuccessfulState) {
+                          double totalAmount = 0;
+                          final cartItems = state.cartItems.reversed;
+
+                          for (CartItem item in cartItems) {
+                            totalAmount += item.totalPrice.toDouble();
+                          }
+                          return Text(
+                            "$totalAmount",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          );
+                        } else if (state is CartLoadingState) {
+                          return const Text(
+                            "...",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ],
+                ),
+                _buildCheckoutButton(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

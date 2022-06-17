@@ -3,6 +3,7 @@ import 'package:dro_health_home_task/models/category.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
 import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/category_container.dart';
+import 'package:dro_health_home_task/widgets/dro_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -102,8 +103,8 @@ class CategoriesPage extends StatelessWidget {
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
+                      children: const [
+                         Text(
                           "Categories",
                           style: TextStyle(
                             color: Colors.white,
@@ -111,26 +112,7 @@ class CategoriesPage extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        Stack(
-                          children: [
-                            const Icon(
-                              Icons.shopping_cart_outlined,
-                              color: Colors.white,
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 2,
-                              child: Container(
-                                height: 7,
-                                width: 7,
-                                decoration: BoxDecoration(
-                                  color: DroColors.yellow,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            )
-                          ],
-                        )
+                        DroCart(),
                       ],
                     ),
                   ),

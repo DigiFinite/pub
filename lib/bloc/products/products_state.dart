@@ -26,6 +26,7 @@ class ProductsSuccessfulState extends ProductsState {
   List<Object> get props => [products];
 }
 
+
 class ProductsFailedState extends ProductsState {
   final dynamic data;
   const ProductsFailedState({

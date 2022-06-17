@@ -1,4 +1,6 @@
+import 'package:dro_health_home_task/bloc/search/search_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchField extends StatefulWidget {
   final TextEditingController? controller;
@@ -36,6 +38,9 @@ class _SearchFieldState extends State<SearchField> {
         fontWeight: FontWeight.w700,
       ),
       onSubmitted: (String searchTerm) {
+        BlocProvider.of<SearchBloc>(context).add(
+          SearchForProductEvent(searchTerm: searchTerm)
+        );
         Navigator.of(context).pushNamed(
           '/search_page',
           arguments: searchTerm,

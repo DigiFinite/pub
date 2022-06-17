@@ -27,6 +27,7 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
+height: 100,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -45,8 +46,8 @@ class _ProductCardState extends State<ProductCard> {
           children: [
             Image.asset(
               _product.imageSource.toString(),
-              height: 165,
-              width: 155,
+              height: 155,
+              width: 170,
               fit: BoxFit.cover,
             ),
             Expanded(

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:dro_health_home_task/models/product.dart';
 
+// ignore: must_be_immutable
 class CartItem extends Equatable {
   Product product;
   int quantity;

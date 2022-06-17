@@ -1,9 +1,7 @@
 import 'package:dro_health_home_task/bloc/cart/cart_bloc.dart';
 import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
 import 'package:dro_health_home_task/models/cart_item.dart';
-import 'package:dro_health_home_task/models/category.dart';
 import 'package:dro_health_home_task/utils/dro_utils.dart';
-import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:dro_health_home_task/widgets/dro_cart.dart';
 import 'package:dro_health_home_task/widgets/dro_counter.dart';
 import 'package:dro_health_home_task/widgets/product_card.dart';
@@ -460,7 +458,7 @@ class _ProductDetailState extends State<ProductDetail> {
     return BlocBuilder<ProductsBloc, ProductsState>(
       builder: (context, state) {
         if (state is ProductsSuccessfulState) {
-          final products = state.products;
+          final products = state.products.where((element) => element.id != _product.id).toList();
           return ListView.separated(
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),

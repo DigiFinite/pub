@@ -14,6 +14,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartLoadingState());
         final List<CartItem>? result = await DroRepository.fetchAllCartItems();
 
+        // ignore: avoid_print
         print("Calling to fetch products");
 
         if (result == null) {
