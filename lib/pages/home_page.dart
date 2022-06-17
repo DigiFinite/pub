@@ -21,128 +21,134 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          const DeliveryLocationWidget(),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              child: ListView(
-                shrinkWrap: true,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "CATEGORIES",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      InkWell(
-                        child: Text(
-                          "VIEW ALL",
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: Column(
+          children: [
+            const DeliveryLocationWidget(),
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                child: ListView(
+                  shrinkWrap: true,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "CATEGORIES",
                           style: TextStyle(
-                            color: DroColors.purple,
+                            color: Colors.grey,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        onTap: () => Navigator.of(context).pushNamed('/all_categories')
+                        InkWell(
+                            child: Text(
+                              "VIEW ALL",
+                              style: TextStyle(
+                                color: DroColors.purple,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onTap: () => Navigator.of(context)
+                                .pushNamed('/all_categories')),
+                      ],
+                    ),
+                    Container(
+                      height: 120,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: _buildCategoryList(),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "SUGGESTIONS",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
                       ),
-                    ],
-                  ),
-                  Container(
-                    height: 120,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: _buildCategoryList(),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "SUGGESTIONS",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w600,
                     ),
-                  ),
-                  GridView.count(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: .67,
-                    children: List.generate(
-                      products.length,
-                      (index) {
-                        final drug = products[index];
-                        return ProductCard(product: drug);
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-      bottomNavigationBar: const HROBottomBar(),
-      floatingActionButton: Container(
-        width: 150,
-        height: 50,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            tileMode: TileMode.mirror,
-            stops: [0.1, 0.7],
-            colors: [
-              Color(0xFFFE806F),
-              Color(0xFFE5366A),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(50),
-          border: Border.all(color: Colors.white, width: 2),
-          shape: BoxShape.rectangle,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Checkout",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Icon(
-              FontAwesomeIcons.cartShopping,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 10),
-            Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.yellow,
-              ),
-              child: const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    "3",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                    GridView.count(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 20,
+                      childAspectRatio: .67,
+                      children: List.generate(
+                        products.length,
+                        (index) {
+                          final drug = products[index];
+                          return ProductCard(product: drug);
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ),
             )
           ],
+        ),
+        bottomNavigationBar: const HROBottomBar(),
+        floatingActionButton: InkWell(
+          child: Container(
+            width: 150,
+            height: 50,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                tileMode: TileMode.mirror,
+                stops: [0.1, 0.7],
+                colors: [
+                  Color(0xFFFE806F),
+                  Color(0xFFE5366A),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(color: Colors.white, width: 2),
+              shape: BoxShape.rectangle,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Checkout",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Icon(
+                  FontAwesomeIcons.cartShopping,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 10),
+                Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.yellow,
+                  ),
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Text(
+                        "3",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          onTap: () => Navigator.pushNamed(context, "/cart_page"),
         ),
       ),
     );
@@ -151,7 +157,6 @@ class _HomePageState extends State<HomePage> {
   ListView _buildCategoryList() {
     return ListView.separated(
       shrinkWrap: true,
-      // physics: const ClampingScrollPhysics(),
       clipBehavior: Clip.none,
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {

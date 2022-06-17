@@ -24,10 +24,13 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   late Product _product;
 
+  late double _totalPrice;
+
   @override
   void initState() {
     super.initState();
     _product = widget.product;
+    _totalPrice = widget.product.price!;
   }
 
   @override
@@ -150,7 +153,9 @@ class _ProductDetailState extends State<ProductDetail> {
                       children: [
                         DroCounterWidget(
                           onChanged: (value) {
-                            print(value);
+                            setState(() {
+                              _totalPrice = value.toDouble() * _product.price!;
+                            });
                           },
                         ),
                         const SizedBox(
@@ -181,7 +186,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             ),
                           ),
                           TextSpan(
-                            text: "${_product.price?.toInt()}",
+                            text: "${_totalPrice.toInt()}",
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 26,
@@ -277,47 +282,135 @@ class _ProductDetailState extends State<ProductDetail> {
               ],
             ),
           ),
-          Container(
-            height: 95,
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 16,
-            ),
-            child: InkWell(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF7A08FA),
-                      Color(0xFFAD3BFC),
+          Builder(builder: (context) {
+            return Container(
+              height: 95,
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 16,
+              ),
+              child: InkWell(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF7A08FA),
+                        Color(0xFFAD3BFC),
+                      ],
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.shopping_cart_outlined,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        "Add to cart",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 15,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      "Add to cart",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
+                onTap: () => {
+                  Scaffold.of(context).showBottomSheet(
+                    (context) {
+                      return Container(
+                        height: 250,
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            topLeft: Radius.circular(30),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${_product.name} has been successfully added to cart!",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            _buildViewCartButton(),
+                            const SizedBox(height: 20),
+                            _buildContinueShoppingButton(),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                },
               ),
-              onTap: () => {},
-            ),
-          )
+            );
+          })
         ],
       ),
+    );
+  }
+
+  InkWell _buildContinueShoppingButton() {
+    return InkWell(
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            width: 3,
+            color: DroColors.purple,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            "CONTINUE SHOPPING",
+            style: TextStyle(
+              color: DroColors.purple,
+              fontWeight: FontWeight.w800,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ),
+      onTap: () => Navigator.of(context).pushReplacementNamed('/home')
+    );
+  }
+
+  Widget _buildViewCartButton() {
+    return InkWell(
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF7A08FA),
+              Color(0xFFAD3BFC),
+            ],
+          ),
+        ),
+        child: const Center(
+          child: Text(
+            "VIEW CART",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ),
+      onTap: () => {},
     );
   }
 
