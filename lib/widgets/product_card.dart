@@ -2,7 +2,7 @@ import 'package:dro_health_home_task/models/product.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
+
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -27,7 +27,7 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-height: 100,
+        height: 100,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -99,14 +99,9 @@ height: 100,
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          SvgPicture.asset(
-                            "assets/icons/naira.svg",
-                          ),
+                          
                           Text(
-                            NumberFormat.simpleCurrency(
-                              decimalDigits: 2,
-                              name: "",
-                            ).format(_product.price),
+                           "₦"+ _product.price!.toStringAsFixed(2),
                             style: const TextStyle(
                               color: Color(0xFF363636),
                               fontSize: 18,
@@ -124,10 +119,7 @@ height: 100,
         ),
       ),
       onTap: () {
-        Navigator.of(context).pushNamed(
-          '/product_detail',
-          arguments: _product
-        );
+        Navigator.of(context).pushNamed('/product_detail', arguments: _product);
       },
     );
   }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -87,7 +86,6 @@ class _CartPageState extends State<CartPage> {
                     const SizedBox(
                       width: 6,
                     ),
-                    SvgPicture.asset("assets/icons/naira.svg"),
                     BlocBuilder<CartBloc, CartState>(
                       builder: (context, state) {
                         if (state is CartSuccessfulState) {
@@ -98,7 +96,7 @@ class _CartPageState extends State<CartPage> {
                             totalAmount += item.totalPrice.toDouble();
                           }
                           return Text(
-                            "$totalAmount",
+                            "₦" + totalAmount.toStringAsFixed(2),
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
@@ -186,14 +184,8 @@ class _CartPageState extends State<CartPage> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      SvgPicture.asset(
-                        "assets/icons/naira.svg",
-                      ),
                       Text(
-                        NumberFormat.simpleCurrency(
-                          decimalDigits: 2,
-                          name: "",
-                        ).format(cartItem.totalPrice),
+                        "₦" + cartItem.totalPrice.toStringAsFixed(2),
                         style: const TextStyle(
                           color: Color(0xFF363636),
                           fontSize: 18,
@@ -229,12 +221,16 @@ class _CartPageState extends State<CartPage> {
                         return DropdownButtonHideUnderline(
                           child: DropdownButton<int>(
                             borderRadius: BorderRadius.circular(7),
+                            isDense: true,
+                            value: cartItem.quantity,
+                            underline: const Divider(
+                              color: Colors.grey,
+                              thickness: 2,
+                            ),
                             icon: Icon(
                               Icons.keyboard_arrow_down,
                               color: DroColors.purple,
                             ),
-                            isDense: true,
-                            value: cartItem.quantity,
                             items: List.generate(
                               8,
                               (dropdownIndex) {
@@ -252,7 +248,6 @@ class _CartPageState extends State<CartPage> {
                               },
                             ),
                             onChanged: (value) {
-                              // ignore: avoid_print
                               setState(() {
                                 cartItems[index].quantity = value ?? 1;
                                 cartItems[index].totalPrice = value == null

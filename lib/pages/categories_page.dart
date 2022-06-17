@@ -1,6 +1,5 @@
 import 'package:dro_health_home_task/bloc/categories_bloc/bloc/categories_bloc.dart';
 import 'package:dro_health_home_task/models/category.dart';
-import 'package:dro_health_home_task/utils/dro_colors.dart';
 import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:dro_health_home_task/widgets/dro_cart.dart';

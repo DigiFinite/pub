@@ -68,8 +68,10 @@ flutter:
   fonts:
     - family: Proxima
       fonts:
+        - asset: assets/fonts/ProximaNova-Regular.otf
         - asset: assets/fonts/ProximaNova.ttf
           style: normal
+        
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto-Regular.ttf

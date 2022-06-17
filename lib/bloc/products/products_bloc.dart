@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dro_health_home_task/models/category.dart';
 import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/repository/dro_repository.dart';
 import 'package:equatable/equatable.dart';

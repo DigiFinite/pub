@@ -1,5 +1,4 @@
 import 'package:dro_health_home_task/bloc/cart/cart_bloc.dart';
-import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
 import 'package:dro_health_home_task/bloc/search/search_bloc.dart';
 import 'package:dro_health_home_task/models/cart_item.dart';
 import 'package:dro_health_home_task/utils/dro_utils.dart';
@@ -437,7 +436,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

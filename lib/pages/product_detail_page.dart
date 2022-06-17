@@ -174,8 +174,10 @@ class _ProductDetailState extends State<ProductDetail> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
-                                _product.imageSource.toString(),
-                                fit: BoxFit.cover,
+                                _product.manufacturerLogo.toString(),
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.contain,
                               ),
                             ),
                           ),
@@ -191,7 +193,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                 ),
                               ),
                               Text(
-                                "Emzor Paracetamol",
+                                _product.manufacturer.toString(),
                                 style: TextStyle(
                                   color: DroColors.navyBlue,
                                   fontWeight: FontWeight.w700,
@@ -238,11 +240,10 @@ class _ProductDetailState extends State<ProductDetail> {
                             ),
                             WidgetSpan(
                               child: Transform.translate(
-                                offset: const Offset(-4.0, -12.0),
-                                child: SvgPicture.asset(
-                                  "assets/icons/naira.svg",
-                                  height: 10,
-                                  width: 10,
+                                offset: const Offset(-2.0, -10.0),
+                                child: const Text(
+                                  "₦",
+                                  style: TextStyle(fontWeight: FontWeight.w800),
                                 ),
                               ),
                             ),
@@ -320,9 +321,9 @@ class _ProductDetailState extends State<ProductDetail> {
                     ],
                   ),
                   const SizedBox(height: 30),
-                  const Text(
-                    "1 pack of Emzor Paracetamol (500mg) contains 8 units of 12 tablets.",
-                    style: TextStyle(
+                   Text(
+                    "1 pack of ${_product.name} (500mg) contains 8 units of 12 tablets.",
+                    style: const TextStyle(
                       color: Colors.grey,
                     ),
                   ),
@@ -458,7 +459,9 @@ class _ProductDetailState extends State<ProductDetail> {
     return BlocBuilder<ProductsBloc, ProductsState>(
       builder: (context, state) {
         if (state is ProductsSuccessfulState) {
-          final products = state.products.where((element) => element.id != _product.id).toList();
+          final products = state.products
+              .where((element) => element.id != _product.id)
+              .toList();
           return ListView.separated(
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),

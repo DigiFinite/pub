@@ -115,9 +115,11 @@ class _HomePageState extends State<HomePage> {
                               crossAxisCount: 2,
                               mainAxisSpacing: 10,
                               crossAxisSpacing: 20,
-                             
-                              childAspectRatio: MediaQuery.of(context).orientation == Orientation.portrait ? 0.67 : 1.2,
-
+                              childAspectRatio:
+                                  MediaQuery.of(context).orientation ==
+                                          Orientation.portrait
+                                      ? 0.67
+                                      : 1.2,
                               children: List.generate(
                                 products.length,
                                 (index) {
@@ -177,77 +179,78 @@ class _HomePageState extends State<HomePage> {
     List<CartItem> cartItems,
   ) {
     return InkWell(
-        child: Container(
-          width: 150,
-          height: 50,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              tileMode: TileMode.mirror,
-              stops: [0.1, 0.7],
-              colors: [
-                Color(0xFFFE806F),
-                Color(0xFFE5366A),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: Colors.white, width: 2),
-            shape: BoxShape.rectangle,
+      child: Container(
+        width: 150,
+        height: 50,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            tileMode: TileMode.mirror,
+            stops: [0.1, 0.7],
+            colors: [
+              Color(0xFFFE806F),
+              Color(0xFFE5366A),
+            ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Checkout",
+          borderRadius: BorderRadius.circular(50),
+          border: Border.all(color: Colors.white, width: 2),
+          shape: BoxShape.rectangle,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Checkout",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Icon(
+              FontAwesomeIcons.cartShopping,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 10),
+            Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.yellow,
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    cartItems.length.toString(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      onTap: () {
+        if (cartItems.isEmpty) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: DroColors.purple,
+              content: const Text(
+                "Your cart is currently empty",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              const Icon(
-                FontAwesomeIcons.cartShopping,
-                color: Colors.white,
-              ),
-              const SizedBox(width: 10),
-              Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.yellow,
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      cartItems.length.toString(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        onTap: () {
-          if (cartItems.isEmpty) {
-            ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: DroColors.purple,
-                content: const Text(
-                  "Your cart is currently empty",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            );
-          } else {
-            Navigator.of(context).pushNamed('/cart_page');
-          }
-        });
+            ),
+          );
+        } else {
+          Navigator.of(context).pushNamed('/cart_page');
+        }
+      },
+    );
   }
 
   Widget _buildCategoryList() {
@@ -346,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               SearchField(
                 controller: _controller,
               ),

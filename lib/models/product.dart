@@ -8,6 +8,8 @@ class Product {
     this.mass,
     this.price,
     this.imageSource,
+    this.manufacturer,
+    this.manufacturerLogo,
   });
 
   final int? id;
@@ -16,6 +18,8 @@ class Product {
   final String? mass;
   final double? price;
   final String? imageSource;
+  final String? manufacturer;
+  final String? manufacturerLogo;
 
   Map<String, dynamic> toMap() {
     return {
@@ -25,6 +29,8 @@ class Product {
       'mass': mass,
       'price': price,
       'imageSource': imageSource,
+      'manufacturer': manufacturer,
+      'manufacturerLogo': manufacturerLogo,
     };
   }
 
@@ -36,11 +42,13 @@ class Product {
       mass: map['mass'],
       price: map['price']?.toDouble(),
       imageSource: map['imageSource'],
+      manufacturer: map['manufacturer'],
+      manufacturerLogo: map['manufacturerLogo'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Product.fromJson(String source) => Product.fromMap(json.decode(source));
+  factory Product.fromJson(String source) =>
+      Product.fromMap(json.decode(source));
 }
-
