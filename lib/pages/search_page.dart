@@ -1,5 +1,8 @@
+import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
+import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/dro_favorite_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -43,21 +46,46 @@ class _SearchPageState extends State<SearchPage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                 children: [
-                  GridView.count(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: .62,
-                    children: List.generate(
-                      3,
-                      (index) {
-                        final product = products[index];
-                        return _buildAddToCardContainer(product);
-                      },
-                    ),
+                  BlocBuilder<ProductsBloc, ProductsState>(
+                    builder: (context, state) {
+                      if (state is ProductsSuccessfulState) {
+                        final products = state.products;
+                        return GridView.count(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: .62,
+                          children: List.generate(
+                            3,
+                            (index) {
+                              final product = products[index];
+                              return _buildAddToCardContainer(product);
+                            },
+                          ),
+                        );
+                      } else if (state is ProductsLoadingState) {
+                        return GridView.count(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: .62,
+                          children: List.generate(3, (index) {
+                            return DroUtils.buildShimmer(
+                              width: 170,
+                              height: 200,
+                              borderRadius: BorderRadius.circular(10),
+                            );
+                          }),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
                   )
                 ],
               ),
@@ -325,5 +353,3 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-
-

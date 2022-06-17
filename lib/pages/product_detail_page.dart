@@ -1,4 +1,6 @@
+import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
 import 'package:dro_health_home_task/models/category.dart';
+import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:dro_health_home_task/widgets/dro_counter.dart';
 import 'package:dro_health_home_task/widgets/product_card.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
 import 'package:dro_health_home_task/widgets/dro_favorite_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -362,28 +365,27 @@ class _ProductDetailState extends State<ProductDetail> {
 
   InkWell _buildContinueShoppingButton() {
     return InkWell(
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            width: 3,
-            color: DroColors.purple,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            "CONTINUE SHOPPING",
-            style: TextStyle(
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              width: 3,
               color: DroColors.purple,
-              fontWeight: FontWeight.w800,
-              fontSize: 15,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              "CONTINUE SHOPPING",
+              style: TextStyle(
+                color: DroColors.purple,
+                fontWeight: FontWeight.w800,
+                fontSize: 15,
+              ),
             ),
           ),
         ),
-      ),
-      onTap: () => Navigator.of(context).pushReplacementNamed('/home')
-    );
+        onTap: () => Navigator.of(context).pushReplacementNamed('/home'));
   }
 
   Widget _buildViewCartButton() {
@@ -414,20 +416,46 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  ListView _buildSimilarProductsList() {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const ClampingScrollPhysics(),
-      clipBehavior: Clip.none,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        final drug = products[index];
-        return ProductCard(product: drug);
+  Widget _buildSimilarProductsList() {
+    return BlocBuilder<ProductsBloc, ProductsState>(
+      builder: (context, state) {
+        if (state is ProductsSuccessfulState) {
+          final products = state.products;
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            clipBehavior: Clip.none,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final drug = products[index];
+              return ProductCard(product: drug);
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+              width: 16,
+            ),
+            itemCount: products.length,
+          );
+        } else if (state is ProductsLoadingState) {
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            clipBehavior: Clip.none,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return DroUtils.buildShimmer(
+                width: 170,
+                height: 200,
+                borderRadius: BorderRadius.circular(10),
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+              width: 16,
+            ),
+            itemCount: 5,
+          );
+        }
+        return const SizedBox.shrink();
       },
-      separatorBuilder: (context, index) => const SizedBox(
-        width: 16,
-      ),
-      itemCount: products.length,
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:dro_health_home_task/bloc/categories_bloc/bloc/categories_bloc.dart';
+import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
 import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/pages/cart_page.dart';
 import 'package:dro_health_home_task/pages/product_detail_page.dart';
@@ -13,7 +14,7 @@ void main() {
 }
 
 class DroApp extends StatelessWidget {
-  final CategoriesBloc _categoriesBloc = CategoriesBloc();
+ 
 
   DroApp({Key? key}) : super(key: key);
 
@@ -23,11 +24,11 @@ class DroApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CategoriesBloc>(
-          create: (context) => _categoriesBloc,
+          create: (context) => CategoriesBloc(),
         ),
-        // BlocProvider(
-        //   create: (context) => SubjectBloc(),
-        // ),
+        BlocProvider<ProductsBloc>(
+          create: (context) => ProductsBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

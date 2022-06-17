@@ -1,17 +1,16 @@
 import 'package:dro_health_home_task/bloc/categories_bloc/bloc/categories_bloc.dart';
+import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
 import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:dro_health_home_task/widgets/delivery_location.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dro_health_home_task/models/category.dart';
-import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
 import 'package:dro_health_home_task/widgets/product_card.dart';
 import 'package:dro_health_home_task/widgets/search_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,6 +27,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     // Load all categories
     BlocProvider.of<CategoriesBloc>(context).add(FetchAllCategoriesEvent());
+
+    // Fetches all products from the mock server
+    BlocProvider.of<ProductsBloc>(context).add(FetchAllProductsEvent());
   }
 
   @override
@@ -43,6 +45,9 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 BlocProvider.of<CategoriesBloc>(context).add(
                   FetchAllCategoriesEvent(),
+                );
+                BlocProvider.of<ProductsBloc>(context).add(
+                  FetchAllProductsEvent(),
                 );
               },
             ),
@@ -92,21 +97,47 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    GridView.count(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 20,
-                      childAspectRatio: .67,
-                      children: List.generate(
-                        products.length,
-                        (index) {
-                          final drug = products[index];
-                          return ProductCard(product: drug);
-                        },
-                      ),
+                    BlocBuilder<ProductsBloc, ProductsState>(
+                      builder: (context, state) {
+                        if (state is ProductsSuccessfulState) {
+                          final products = state.products;
+                          return GridView.count(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 20,
+                            childAspectRatio: .67,
+                            children: List.generate(
+                              products.length,
+                              (index) {
+                                final product = products[index];
+                                return ProductCard(product: product);
+                              },
+                            ),
+                          );
+                        } else if (state is ProductsLoadingState) {
+                          return GridView.count(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 20,
+                            childAspectRatio: .67,
+                            children: List.generate(
+                              6,
+                              (index) => DroUtils.buildShimmer(
+                                width: 200,
+                                height: 200,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
                     )
                   ],
                 ),
@@ -214,8 +245,6 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
-  
 
   PreferredSize _buildAppBar() {
     return PreferredSize(
