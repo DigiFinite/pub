@@ -1,3 +1,4 @@
+import 'package:dro_health_home_task/bloc/cart/cart_bloc.dart';
 import 'package:dro_health_home_task/bloc/categories_bloc/bloc/categories_bloc.dart';
 import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
 import 'package:dro_health_home_task/models/product.dart';
@@ -10,13 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(DroApp());
+  runApp(const DroApp());
 }
 
 class DroApp extends StatelessWidget {
- 
-
-  DroApp({Key? key}) : super(key: key);
+  const DroApp({Key? key}) : super(key: key);
 
   // This widget is the root of this application.
   @override
@@ -28,6 +27,9 @@ class DroApp extends StatelessWidget {
         ),
         BlocProvider<ProductsBloc>(
           create: (context) => ProductsBloc(),
+        ),
+        BlocProvider<CartBloc>(
+          create: (context) => CartBloc(),
         ),
       ],
       child: MaterialApp(

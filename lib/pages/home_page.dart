@@ -1,5 +1,7 @@
+import 'package:dro_health_home_task/bloc/cart/cart_bloc.dart';
 import 'package:dro_health_home_task/bloc/categories_bloc/bloc/categories_bloc.dart';
 import 'package:dro_health_home_task/bloc/products/products_bloc.dart';
+import 'package:dro_health_home_task/models/cart_item.dart';
 import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:dro_health_home_task/widgets/delivery_location.dart';
@@ -27,181 +29,223 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     // Load all categories
     BlocProvider.of<CategoriesBloc>(context).add(FetchAllCategoriesEvent());
-
     // Fetches all products from the mock server
     BlocProvider.of<ProductsBloc>(context).add(FetchAllProductsEvent());
+    // Fetches cart items
+    BlocProvider.of<CartBloc>(context).add(FetchAllCartItemsEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-        appBar: _buildAppBar(),
-        body: Column(
-          children: [
-            InkWell(
-              child: const DeliveryLocationWidget(),
-              onTap: () {
-                BlocProvider.of<CategoriesBloc>(context).add(
-                  FetchAllCategoriesEvent(),
-                );
-                BlocProvider.of<ProductsBloc>(context).add(
-                  FetchAllProductsEvent(),
-                );
-              },
-            ),
-            Expanded(
-              child: Container(
-                color: Colors.white,
-                child: ListView(
-                  shrinkWrap: true,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "CATEGORIES",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        InkWell(
-                          child: Text(
-                            "VIEW ALL",
+      child: BlocListener<CartBloc, CartState>(
+        listener: (context, state) {
+          if (state is CartItemAddedFailedState) {}
+        },
+        child: Scaffold(
+          appBar: _buildAppBar(),
+          body: Column(
+            children: [
+              InkWell(
+                child: const DeliveryLocationWidget(),
+                onTap: () {
+                  BlocProvider.of<CategoriesBloc>(context).add(
+                    FetchAllCategoriesEvent(),
+                  );
+                  BlocProvider.of<ProductsBloc>(context).add(
+                    FetchAllProductsEvent(),
+                  );
+                },
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.white,
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 20),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "CATEGORIES",
                             style: TextStyle(
-                              color: DroColors.purple,
+                              color: Colors.grey,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          onTap: () => Navigator.of(context)
-                              .pushNamed('/all_categories'),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 120,
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: _buildCategoryList(),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      "SUGGESTIONS",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    BlocBuilder<ProductsBloc, ProductsState>(
-                      builder: (context, state) {
-                        if (state is ProductsSuccessfulState) {
-                          final products = state.products;
-                          return GridView.count(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 20,
-                            childAspectRatio: .67,
-                            children: List.generate(
-                              products.length,
-                              (index) {
-                                final product = products[index];
-                                return ProductCard(product: product);
-                              },
-                            ),
-                          );
-                        } else if (state is ProductsLoadingState) {
-                          return GridView.count(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 20,
-                            childAspectRatio: .67,
-                            children: List.generate(
-                              6,
-                              (index) => DroUtils.buildShimmer(
-                                width: 200,
-                                height: 200,
-                                borderRadius: BorderRadius.circular(10),
+                          InkWell(
+                            child: Text(
+                              "VIEW ALL",
+                              style: TextStyle(
+                                color: DroColors.purple,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-        bottomNavigationBar: const HROBottomBar(),
-        floatingActionButton: InkWell(
-          child: Container(
-            width: 150,
-            height: 50,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                tileMode: TileMode.mirror,
-                stops: [0.1, 0.7],
-                colors: [
-                  Color(0xFFFE806F),
-                  Color(0xFFE5366A),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(color: Colors.white, width: 2),
-              shape: BoxShape.rectangle,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "Checkout",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Icon(
-                  FontAwesomeIcons.cartShopping,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 10),
-                Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.yellow,
-                  ),
-                  child: const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Text(
-                        "3",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                            onTap: () => Navigator.of(context)
+                                .pushNamed('/all_categories'),
+                          ),
+                        ],
                       ),
-                    ),
+                      Container(
+                        height: 120,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: _buildCategoryList(),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "SUGGESTIONS",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      BlocBuilder<ProductsBloc, ProductsState>(
+                        builder: (context, state) {
+                          if (state is ProductsSuccessfulState) {
+                            final products = state.products;
+                            return GridView.count(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 20,
+                              childAspectRatio: .67,
+                              children: List.generate(
+                                products.length,
+                                (index) {
+                                  final product = products[index];
+                                  return ProductCard(product: product);
+                                },
+                              ),
+                            );
+                          } else if (state is ProductsLoadingState) {
+                            return GridView.count(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 20,
+                              childAspectRatio: .67,
+                              children: List.generate(
+                                6,
+                                (index) => DroUtils.buildShimmer(
+                                  width: 200,
+                                  height: 200,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
-          onTap: () => Navigator.pushNamed(context, "/cart_page"),
+          bottomNavigationBar: const HROBottomBar(),
+          floatingActionButton: BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartSuccessfulState) {
+                final cartItems = state.cartItems;
+                return _buildCheckoutContainer(context, cartItems);
+              } else if (state is CartItemAddedFailedState) {
+                final cartItems = state.cartItems;
+                return _buildCheckoutContainer(context, cartItems);
+              }
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );
+  }
+
+  Widget _buildCheckoutContainer(
+    BuildContext context,
+    List<CartItem> cartItems,
+  ) {
+    return InkWell(
+        child: Container(
+          width: 150,
+          height: 50,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              tileMode: TileMode.mirror,
+              stops: [0.1, 0.7],
+              colors: [
+                Color(0xFFFE806F),
+                Color(0xFFE5366A),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(color: Colors.white, width: 2),
+            shape: BoxShape.rectangle,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Checkout",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Icon(
+                FontAwesomeIcons.cartShopping,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 10),
+              Container(
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.yellow,
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      cartItems.length.toString(),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        onTap: () {
+          if (cartItems.isEmpty) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: DroColors.purple,
+                content: const Text(
+                  "Your cart is currently empty",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            );
+          } else {
+            Navigator.of(context).pushNamed('/cart_page');
+          }
+        });
   }
 
   Widget _buildCategoryList() {

@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:dro_health_home_task/models/cart_item.dart';
+import 'package:dro_health_home_task/models/cart_item_response.dart';
 import 'package:dro_health_home_task/models/category.dart';
 import 'package:dro_health_home_task/models/product.dart';
 
@@ -79,21 +83,82 @@ class DroRepository {
         imageSource: "assets/images/paracetamol_syrup.png"),
   ];
 
+  static final List<CartItem> cartItems = [
+    // CartItem(
+    //   product: Product(
+    //     id: 1,
+    //     name: "Paracetamol",
+    //     type: "Tablet",
+    //     mass: "500",
+    //     price: 350,
+    //     imageSource: "assets/images/emzor_paracetamol.jpeg",
+    //   ),
+    //   quantity: 1,
+    // ),
+    // CartItem(
+    //   product: Product(
+    //     id: 2,
+    //     name: "Doliprane",
+    //     type: "Capsule",
+    //     mass: "1000",
+    //     price: 350,
+    //     imageSource: "assets/images/doliprane_paracetamol.jpeg",
+    //   ),
+    //   quantity: 4,
+    // ),
+  ];
+
   /// Fetch call Dro Health Product categories and return them as a future.
   static Future<List<Category>?> fetchAllCategories() {
-  // simulates the fetching of categories from the server
+    // simulates the fetching of categories from the server
     return Future.delayed(
       const Duration(seconds: 3),
       () => categories,
     );
   }
 
-    /// Fetch call Dro Health Products. A Future of products is returned
+  /// Fetch call Dro Health Products. A Future of products is returned
   static fetchAllProducts() {
-  // simulates the fetching of all products from the server
+    // simulates the fetching of all products from the server
     return Future.delayed(
-      const Duration(seconds: 10),
+      const Duration(seconds: 3),
       () => products,
+    );
+  }
+
+  static Future<List<CartItem>?> fetchAllCartItems() {
+    return Future.delayed(
+      const Duration(seconds: 0),
+      () => cartItems,
+    );
+  }
+
+  static Future<CartItemResponse> addItemToCart(CartItem cartItem) {
+    return Future.delayed(
+      const Duration(seconds: 0),
+      () {
+        if (cartItems.contains(cartItem)) {
+          final cartItemsResponse =
+              CartItemResponse(status: "error", cartItems: cartItems);
+          return cartItemsResponse;
+        } else {
+          cartItems.add(cartItem);
+          final cartItemsResponse =
+              CartItemResponse(status: "success", cartItems: cartItems);
+          return cartItemsResponse;
+        }
+      },
+    );
+  }
+
+  static Future<List<CartItem>?> removeItemFromCart(CartItem cartItem) {
+    return Future.delayed(
+      const Duration(seconds: 0),
+      () {
+        cartItems.remove(cartItem);
+   
+        return cartItems;
+      },
     );
   }
 }
