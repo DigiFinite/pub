@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
-  Product({
+   // ignore: prefer_const_constructors_in_immutables
+   Product({
     this.id,
     this.name,
     this.type,

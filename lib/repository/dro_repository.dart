@@ -29,7 +29,7 @@ class DroRepository {
   ];
 
   // List of products
-  static final List<Product> products = [
+  static List<Product> products =  [
     Product(
         id: 1,
         name: "Paracetamol",
