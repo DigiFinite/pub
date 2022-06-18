@@ -23,7 +23,7 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 170,
+      width: 200,
       height: 260,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -48,7 +48,7 @@ class _ProductCardState extends State<ProductCard> {
             Image.asset(
               _product.imageSource.toString(),
               height: 155,
-              width: 170,
+              width: 200,
               fit: BoxFit.cover,
             ),
             Expanded(

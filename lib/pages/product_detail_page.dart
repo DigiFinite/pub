@@ -337,6 +337,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                   Container(
                     height: 280,
+                  
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: _buildSimilarProductsList(),
                   ),

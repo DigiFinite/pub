@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                 child: Container(
+                  alignment: Alignment.center,
                   color: Colors.white,
                   child: ListView(
                     shrinkWrap: true,
@@ -111,9 +112,11 @@ class _HomePageState extends State<HomePage> {
                         builder: (context, state) {
                           if (state is ProductsSuccessfulState) {
                             final products = state.products;
-                            return ItemCardLayoutGrid(
-                              crossAxisCount: 2,
-                              items: products,
+                            return Center(
+                              child: ItemCardLayoutGrid(
+                                crossAxisCount: 2,
+                                items: products,
+                              ),
                             );
                           } else if (state is ProductsLoadingState) {
                             return GridView.count(
