@@ -5,11 +5,11 @@ import 'package:dro_health_home_task/models/cart_item.dart';
 import 'package:dro_health_home_task/utils/dro_utils.dart';
 import 'package:dro_health_home_task/widgets/category_container.dart';
 import 'package:dro_health_home_task/widgets/delivery_location.dart';
+import 'package:dro_health_home_task/widgets/item_layout_grid.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dro_health_home_task/models/category.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
-import 'package:dro_health_home_task/widgets/product_card.dart';
 import 'package:dro_health_home_task/widgets/search_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -64,7 +64,9 @@ class _HomePageState extends State<HomePage> {
                   child: ListView(
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 20),
+                      vertical: 16,
+                      horizontal: 20,
+                    ),
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,29 +106,14 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      const SizedBox(height: 16),
                       BlocBuilder<ProductsBloc, ProductsState>(
                         builder: (context, state) {
                           if (state is ProductsSuccessfulState) {
                             final products = state.products;
-                            return GridView.count(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
+                            return ItemCardLayoutGrid(
                               crossAxisCount: 2,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 20,
-                              childAspectRatio:
-                                  MediaQuery.of(context).orientation ==
-                                          Orientation.portrait
-                                      ? 0.67
-                                      : 1.2,
-                              children: List.generate(
-                                products.length,
-                                (index) {
-                                  final productItem = products[index];
-                                  return ProductCard(product: productItem);
-                                },
-                              ),
+                              items: products,
                             );
                           } else if (state is ProductsLoadingState) {
                             return GridView.count(
@@ -140,8 +127,8 @@ class _HomePageState extends State<HomePage> {
                               children: List.generate(
                                 6,
                                 (index) => DroUtils.buildShimmer(
-                                  width: 200,
-                                  height: 200,
+                                  width: 170,
+                                  height: 260,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),

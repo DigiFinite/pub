@@ -48,8 +48,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         if (result == null) {
           emit(const CartFailedState(data: "Error removing item"));
         } else {
+          emit(CartSuccessfulState(cartItems: result));
           add(FetchAllCartItemsEvent());
-          // emit(CartSuccessfulState(cartItems: result));
         }
       }
     });

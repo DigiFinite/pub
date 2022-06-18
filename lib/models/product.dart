@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-class Product {
+import 'package:equatable/equatable.dart';
+
+class Product extends Equatable {
   Product({
     this.id,
     this.name,
@@ -51,4 +53,16 @@ class Product {
 
   factory Product.fromJson(String source) =>
       Product.fromMap(json.decode(source));
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        type,
+        mass,
+        price,
+        imageSource,
+        manufacturer,
+        manufacturerLogo
+      ];
 }

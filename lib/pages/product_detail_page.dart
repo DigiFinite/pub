@@ -11,7 +11,6 @@ import 'package:dro_health_home_task/models/product.dart';
 import 'package:dro_health_home_task/utils/dro_colors.dart';
 import 'package:dro_health_home_task/widgets/dro_favorite_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;

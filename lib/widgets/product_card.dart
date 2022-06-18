@@ -1,9 +1,6 @@
 import 'package:dro_health_home_task/models/product.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
-
-
 class ProductCard extends StatefulWidget {
   final Product product;
   const ProductCard({
@@ -25,22 +22,26 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        height: 100,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(196, 196, 196, 1.1),
-              offset: Offset(0, 6),
-              blurRadius: 6,
-              spreadRadius: 3,
-            )
-          ],
-        ),
+    return Container(
+      width: 170,
+      height: 260,
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromRGBO(196, 196, 196, 1.1),
+            offset: Offset(0, 6),
+            blurRadius: 6,
+            spreadRadius: 3,
+          )
+        ],
+      ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed('/product_detail', arguments: _product);
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -118,9 +119,6 @@ class _ProductCardState extends State<ProductCard> {
           ],
         ),
       ),
-      onTap: () {
-        Navigator.of(context).pushNamed('/product_detail', arguments: _product);
-      },
     );
   }
 }
